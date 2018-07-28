@@ -1,0 +1,7 @@
+node_modules
+.vscode/*
+!.vscode/*.json
+dist
+out
+lib
+lib-esm
