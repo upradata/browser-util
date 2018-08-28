@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "es2017"
+        ],
+        "module": "umd",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "target": "es2015",
+        "traceResolution": false,
+        "outDir": "out"
+    },
+    "include": [
+        "src/**/*.ts",
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

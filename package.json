@@ -1,9 +1,9 @@
 {
-  "name": "tm-util",
+  "name": "@mt/util",
   "version": "1.0.0",
   "description": "",
-  "main": "{{lib/src}}/index.js",
-  "types": "index.ts",
+  "main": "src",
+  "types": "src",
   "scripts": {
     "test": "shx echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf _bundles lib lib-esm",
@@ -25,10 +25,6 @@
     "tslint": "^5.10.0"
   },
   "dependencies": {
-    "rimraf": "^2.6.2",
-    "tmp": "^0.0.33",
-    "ts-util-is": "^1.1.3",
-    "tsconfig": "^7.0.0",
-    "typescript": "^2.9.2"
+    "ts-util-is": "^1.1.3"
   }
 }
