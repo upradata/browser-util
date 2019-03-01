@@ -1,4 +1,14 @@
+import { isUndefined, isNull } from 'ts-util-is';
+
 export * from 'ts-util-is';
+
+export function isArray<T>(value: any): value is T[] {
+    return Array.isArray(value);
+}
+
+export function isDefined(o: any) {
+    return !isUndefined(o);
+}
 
 
 // MDN Polyfill
@@ -15,7 +25,7 @@ export function isFloat(n: number) {
 }
 
 export function isNil(value: any) {
-    return value === null || value === undefined;
+    return isNull(value) || isUndefined(value);
 }
 
 export function isAsyncFunction(value: any) {

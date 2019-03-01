@@ -1,5 +1,12 @@
 export * from './assign';
 export * from './is';
+export * from './boolean-attribute';
+export * from './observable-subscribe-once';
+export * from './guid';
+export * from './execute-temporary-state';
+
+export * from './node-util';
+// export * from './path-normalize';
 
 
 // chain(() => o.a.b.c) ==> if a prop doesn't exist ==> return defaultValue

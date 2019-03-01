@@ -1,21 +1,24 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
+        "allowJs": true,
         "declaration": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
-            "es2017"
+            "es2017",
+            "dom"
         ],
         "module": "umd",
         "moduleResolution": "node",
         "sourceMap": true,
-        "target": "es2015",
+        // "target": "es2015",
+        "target": "es5",
         "traceResolution": false,
-        "outDir": "out"
+        "outDir": "dist"
     },
     "include": [
-        "src/**/*.ts",
+        "src"
     ],
     "exclude": [
         "node_modules"
