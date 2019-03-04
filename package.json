@@ -23,7 +23,8 @@
     "devDependencies": {
         "@types/node": "^10.5.4",
         "ts-node": "^6.1.1",
-        "tslint": "^5.10.0"
+        "tslint": "^5.10.0",
+        "typescript": "^3.3.3333"
     },
     "dependencies": {
         "rxjs": "^6.3.3",
