@@ -1,4 +1,4 @@
-# @mt/browser-util
+# @upradata/browser-util
 Browser Utilities
 
 ## A bunch of utilities in typescript working on Browser (ans so on Node)
