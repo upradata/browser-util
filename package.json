@@ -6,7 +6,7 @@
         "url": "https://github.com/milottit"
     },
     "license": "MIT",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "",
     "main": "dist",
     "types": "dist-es6",
