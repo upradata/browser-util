@@ -14,7 +14,7 @@ type PartialRec<T> = {
 
 // https://stackoverflow.com/questions/41980195/recursive-partialt-in-typescript-2-1
 // more compact than mine
-export type PartialRecursive<T> = {
+/*export type PartialRecursive<T> = {
     [ K in keyof T ]?:
     T[ K ] extends (infer U)[] ? T[ K ] :
     T[ K ] extends object ? PartialRecursiveWithArray<T[ K ]> :
@@ -25,5 +25,12 @@ export type PartialRecursiveWithArray<T> = {
     [ K in keyof T ]?:
     T[ K ] extends (infer U)[] ? PartialRecursiveWithArray<U>[] :
     T[ K ] extends object ? PartialRecursiveWithArray<T[ K ]> :
+    T[ K ];
+};*/
+
+export type PartialRecursive<T> = {
+    [ K in keyof T ]?:
+    T[ K ] extends (infer U)[] ? T[ K ] :
+    T[ K ] extends object ? PartialRecursive<T[ K ]> :
     T[ K ];
 };
