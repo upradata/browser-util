@@ -21,7 +21,6 @@
     "devDependencies": {
         "@types/jest": "^24.0.17",
         "@types/node": "^12.6.9",
-        "crypto": "^1.0.1",
         "jest": "^24.8.0",
         "shx": "^0.3.2",
         "ts-jest": "^24.0.2",
