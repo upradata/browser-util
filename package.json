@@ -16,7 +16,9 @@
         "e2e": "npx jest --verbose false --config ../../jest-e2e.config.js",
         "clean": "shx rm -rf lib lib-esm",
         "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
-        "build:watch": "yarn tsc -w"
+        "build:watch": "yarn tsc -w",
+        "push": "npm version patch && git push && git push --tags",
+        "publish": "npm publish --access public"
     },
     "devDependencies": {
         "@types/jest": "^24.0.17",
