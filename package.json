@@ -17,8 +17,8 @@
         "clean": "shx rm -rf lib lib-esm",
         "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
         "build:watch": "yarn tsc -w",
-        "push": "tsc && npm version patch && git push && git push --tags",
-        "publish": "npm publish --access public"
+        "push": "npm version patch && git push && git push --tags",
+        "publish": "tsc && npm publish --access public"
     },
     "devDependencies": {
         "@types/jest": "^24.0.17",
