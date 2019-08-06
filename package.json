@@ -6,7 +6,7 @@
         "url": "https://github.com/milottit"
     },
     "license": "MIT",
-    "version": "1.0.4",
+    "version": "1.0.3",
     "description": "",
     "main": "dist",
     "types": "dist-es6",
@@ -17,8 +17,8 @@
         "clean": "shx rm -rf lib lib-esm",
         "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
         "build:watch": "yarn tsc -w",
-        "push": "npm version patch && git push && git push --tags",
-        "publish": "tsc && npm publish --access public"
+        "push": "yarn build && npm version patch && git push && git push --tags",
+        "publish": "yarn build && npm publish --access public"
     },
     "devDependencies": {
         "@types/jest": "^24.0.17",
