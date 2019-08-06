@@ -1,8 +1,8 @@
-export interface PlainObj<T = any> {
+export interface ObjectOf<T = any> {
     [ k: string ]: T;
 }
 
-
+export type PlainObj<T = any> = ObjectOf<T>;
 
 /* export type PartialRecursive<T> = PartialRec<T>;
 

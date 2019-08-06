@@ -238,7 +238,7 @@ export class EventWrapperInRaf {
 
         const detail = getDetail ? getDetail(event) : {}; // last event is captured
         if (debug !== '')
-            detail['debug-' + EventWrapperInRaf.uniqueId] = debug;
+            detail[ 'debug-' + EventWrapperInRaf.uniqueId ] = debug;
 
 
         return detail;
