@@ -1,47 +1,56 @@
 
-import { PlainObj } from './type';
-
-export type Copy<T> = {
-    [ K in keyof T ]: T[ K ];
-};
+import { PlainObj, PartialRecursive } from './type';
 
 
 export type AssignMode = 'of' | 'in';
 export type ArrayMode = 'merge' | 'replace';
 
-export interface AssignOption {
-    assignMode?: AssignMode;
-    arrayMode?: ArrayMode;
+export class AssignOption {
+    assignMode?: AssignMode = 'of';
+    arrayMode?: ArrayMode = 'merge';
+    depth?: number = NaN;
 }
 
-const assignOptionDefault: AssignOption = {
-    assignMode: 'of',
-    arrayMode: 'merge'
-};
+
 
 class Assign {
+    assignMode: AssignMode;
+    arrayMode: ArrayMode;
+    depth: number;
 
-    assignRecursive(out: PlainObj, ins: PlainObj[],
-        { assignMode = assignOptionDefault.assignMode, arrayMode = assignOptionDefault.arrayMode }: AssignOption = assignOptionDefault) {
-        // const { assignMode = assignOptionDefault.assignMode, arrayMode = assignOptionDefault.arrayMode } = assignOption;
+    constructor(private out: PlainObj, private ins: PlainObj[], option?: AssignOption) {
+        Object.assign(this, new AssignOption(), option);
+    }
 
-        const to = Object(out);
+    private lastLevel() {
+        return !isNaN(this.depth) && this.depth === 1;
+    }
+
+    private isObjectOrArray(e: any) {
+        return typeof e === 'object' && e !== null;
+    }
+
+    assignRecursive() {
+        const { assignMode, arrayMode, depth, out, ins } = this;
+
+        const to = typeof (out) === 'object' ? out : {}; //  Object(out);
 
         for (const inn of ins) {
             if (inn === undefined || inn === null)
                 continue;
 
-            // for (const prop of Object.keys(inn)) {
             for (const prop in inn) {
 
                 if (assignMode === 'of' && inn.hasOwnProperty(prop) || assignMode === 'in') {
                     // recursion
-                    if (typeof inn[ prop ] === 'object' && inn[ prop ] !== null) { // array also
+                    if (this.isObjectOrArray(inn[ prop ]) && !this.lastLevel()) { // array also
                         if (Array.isArray(inn[ prop ]) && arrayMode === 'replace')
                             to[ prop ] = inn[ prop ];
                         else {
                             const defaultTo = Array.isArray(inn[ prop ]) ? [] : {};
-                            to[ prop ] = this.assignRecursive(to[ prop ] || defaultTo, [ inn[ prop ] ], { assignMode, arrayMode });
+                            const option = { assignMode, arrayMode, depth: depth - 1 };
+
+                            to[ prop ] = new Assign(to[ prop ] || defaultTo, [ inn[ prop ] ], option).assignRecursive();
                         }
                     } else
                         // normal case
@@ -56,72 +65,63 @@ class Assign {
 }
 
 
-const assign = new Assign();
 
 
-
-
-export function assignRecursiveArray<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: [ T2 ], assignMode?: AssignOption): Copy<T1 & T2>;
+export function assignRecursiveArray<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: [ T2 ], assignMode?: AssignOption): T1 & T2;
 export function assignRecursiveArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj>(out: T1, inn: [ T2, T3 ], assignMode?: AssignOption): Copy<T1 & T2 & T3>;
+    T3 extends PlainObj>(out: T1, inn: [ T2, T3 ], assignMode?: AssignOption): T1 & T2 & T3;
 export function assignRecursiveArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn: [ T2, T3, T4 ], assignMode?: AssignOption): Copy<T1 & T2 & T3 & T4>;
+    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn: [ T2, T3, T4 ], assignMode?: AssignOption): T1 & T2 & T3 & T4;
 export function assignRecursiveArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn: [ T2, T3, T4, T5 ], assignMode?: AssignOption): Copy<T1 & T2 & T3 & T4 & T5>;
-export function assignRecursiveArray(out: PlainObj, ins: PlainObj[], assignMode: AssignOption = assignOptionDefault) {
+    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn: [ T2, T3, T4, T5 ], assignMode?: AssignOption): T1 & T2 & T3 & T4 & T5;
+export function assignRecursiveArray(out: PlainObj, ins: PlainObj[], assignMode?: AssignOption) {
 
-    return assign.assignRecursive(out, ins, assignMode);
+    return new Assign(out, ins, assignMode).assignRecursive();
 }
 
 
 
-export function assignRecursive<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: T2): Copy<T1 & T2>;
+export function assignRecursive<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: T2): T1 & T2;
 export function assignRecursive<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj>(out: T1, inn1: T2, inn2: T3): Copy<T1 & T2 & T3>;
+    T3 extends PlainObj>(out: T1, inn1: T2, inn2: T3): T1 & T2 & T3;
 export function assignRecursive<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4): Copy<T1 & T2 & T3 & T4>;
+    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4): T1 & T2 & T3 & T4;
 export function assignRecursive<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4, inn4: T5): Copy<T1 & T2 & T3 & T4 & T5>;
+    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4, inn4: T5): T1 & T2 & T3 & T4 & T5;
 export function assignRecursive(out: PlainObj, ...ins: PlainObj[]) {
-
-    return assign.assignRecursive(out, ins);
+    // it is not possible to add a third argument (assignMode?: AssignOption) after an elliptic arg
+    return new Assign(out, ins).assignRecursive();
 }
 
 
-export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: [ T2 ], arrayMode?: ArrayMode): Copy<T1 & T2>;
-export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj>(out: T1, inn: [ T2, T3 ], arrayMode?: ArrayMode): Copy<T1 & T2 & T3>;
-export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn: [ T2, T3, T4 ], arrayMode?: ArrayMode): Copy<T1 & T2 & T3 & T4>;
-export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn: [ T2, T3, T4, T5 ], arrayMode?: ArrayMode): Copy<T1 & T2 & T3 & T4 & T5>;
-export function assignRecursiveInArray(out: PlainObj, ins: PlainObj[], arrayMode: ArrayMode = 'merge') {
+type AssignOptionRed = Omit<AssignOption, 'assignMode'>;
 
-    return assign.assignRecursive(out, ins, { assignMode: 'in', arrayMode });
+export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: [ T2 ], assignMode?: AssignOptionRed): T1 & T2;
+export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
+    T3 extends PlainObj>(out: T1, inn: [ T2, T3 ], assignMode?: AssignOptionRed): T1 & T2 & T3;
+export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
+    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn: [ T2, T3, T4 ], assignMode?: AssignOptionRed): T1 & T2 & T3 & T4;
+export function assignRecursiveInArray<T1 extends PlainObj, T2 extends PlainObj,
+    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn: [ T2, T3, T4, T5 ], assignMode?: AssignOptionRed): T1 & T2 & T3 & T4 & T5;
+export function assignRecursiveInArray(out: PlainObj, ins: PlainObj[], assignMode: AssignOptionRed) {
+
+    return new Assign(out, ins, { ...assignMode, assignMode: 'in' }).assignRecursive();
 }
 
-export function assignRecursiveIn<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: T2): Copy<T1 & T2>;
+export function assignRecursiveIn<T1 extends PlainObj, T2 extends PlainObj>(out: T1, inn: T2): T1 & T2;
 export function assignRecursiveIn<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj>(out: T1, inn1: T2, inn2: T3): Copy<T1 & T2 & T3>;
+    T3 extends PlainObj>(out: T1, inn1: T2, inn2: T3): T1 & T2 & T3;
 export function assignRecursiveIn<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4): Copy<T1 & T2 & T3 & T4>;
+    T3 extends PlainObj, T4 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4): T1 & T2 & T3 & T4;
 export function assignRecursiveIn<T1 extends PlainObj, T2 extends PlainObj,
-    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4, inn4: T5): Copy<T1 & T2 & T3 & T4 & T5>;
+    T3 extends PlainObj, T4 extends PlainObj, T5 extends PlainObj>(out: T1, inn1: T2, inn2: T3, inn3: T4, inn4: T5): T1 & T2 & T3 & T4 & T5;
 export function assignRecursiveIn(out: PlainObj, ...ins: PlainObj[]) {
 
-    return assign.assignRecursive(out, ins, { assignMode: 'in', arrayMode: 'merge' });
+    return new Assign(out, ins, { assignMode: 'in', arrayMode: 'merge' }).assignRecursive();
 }
 
 
-export function assignDefaultOption<T extends PlainObj>(defaultOption: Partial<T>, option: T, assignMode: AssignOption = { assignMode: 'in', arrayMode: 'merge' }) {
-    // if (typeof option === 'object' || option === undefined)
+export function assignDefaultOption<T extends PlainObj>(defaultOption: T, option: PartialRecursive<T>, assignMode: AssignOption = { assignMode: 'in', arrayMode: 'merge' }): T {
+
     return assignRecursiveArray({}, [ defaultOption, option ], assignMode);
-
-    // return option;
 }
-
-
-/* const a = { a: 1, b: 2, c: { c11: 11, c12: 12, c13: { c21: 21, c22: 22 } }, d: 3 };
-const b = { b: 3, c: { c11: 50, c13: { c22: 100 } } };
-const a0 = { b: 2 };
-console.log(assignRecursive(a0, a, b)); */
