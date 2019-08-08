@@ -5,21 +5,30 @@
         "email": "thomas.milotti@gmail.com",
         "url": "https://github.com/milottit"
     },
+    "repository": {
+        "url": "https://github.com/mt-typescript/browser-util.git"
+    },
     "license": "MIT",
     "version": "1.0.8",
     "description": "",
     "main": "dist",
-    "types": "dist-es6",
-    "module": "dist-es6",
+    "types": "lib-esm",
+    "module": "lib-esm",
     "scripts": {
         "test": "npx jest --verbose false --config jest-ut.config.js",
-        "e2e": "npx jest --verbose false --config jest-e2e.config.js",
-        "clean": "shx rm -rf lib lib-esm",
+        "e2e": "npx jest --passWithNoTests --verbose false --config jest-e2e.config.js",
+        "clean": "shx rm -rf dist lib-esm",
+        "prebuild": "yarn clean",
         "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
+        "postbuild": "yarn test && yarn e2e",
         "build:watch": "yarn tsc -w",
         "github-push": "yarn build && npm version patch && git push && git push --tags",
         "npm-publish": "yarn build && npm publish --access public"
     },
+    "files": [
+        "dist",
+        "lib-esm"
+    ],
     "devDependencies": {
         "@types/jest": "^24.0.17",
         "@types/node": "^12.6.9",
@@ -38,5 +47,8 @@
     "keywords": [
         "typescript",
         "util"
-    ]
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
 }

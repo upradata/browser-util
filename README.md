@@ -1,7 +1,7 @@
 # @upradata/browser-util
 Browser Utilities
 
-## A bunch of utilities in typescript working on Browser (ans so on Node)
+## A bunch of utilities in typescript working on Browser (and so on Node)
 
 - assignRecursive, assignDefaultOption
   
