@@ -3,6 +3,8 @@ Browser Utilities
 
 ## A bunch of utilities in typescript working on Browser (and so on Node)
 
+Look at [Node Utilities](https://www.npmjs.com/package/@upradata/browser-util), for util stuff working only Node
+
 - assignRecursive, assignDefaultOption
   
 ```
