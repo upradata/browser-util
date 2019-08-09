@@ -39,12 +39,24 @@ chain(() => a.b.c.d, defaultValue);
     c: 3
 };
 
-const oo = new ExecuteOnTempState().state({ obj: o, tmpState: { b: 22, c: 33 } }).execute(function () {
-    console.log(o);
-    console.log(this);
+const oTmpProps = { b: 22, c: 33 };
 
-    return Promise.resolve(o);
+const p = temp.from(o).to(tmpState).execute(tmp => {
+    console.assert(o === tmp);
+    console.assert(tmp === this);
+
+    // It is possible to return a value, Promise or Observable
+    return Promise.resolve('test');
 });
+
+p.then(s => console.assert(s === 'test'));
+
+// These constructions are all the same
+
+const e1 = new ExecuteOnTempState({ obj: o, tmpState });
+const e2 = new ExecuteOnTempState().state({ obj: o, tmpState });
+const e3 = new ExecuteOnTempState().from(o).to(tmpState);
+const e4 = temp(o).to(tmpState);
 ```
 
 - EventWrapperInRaf (wrap an event inside a requestAnimationFrame)
@@ -69,6 +81,8 @@ const oo = new ExecuteOnTempState().state({ obj: o, tmpState: { b: 22, c: 33 } }
     EventWrapperInRaf.create(scrollEvent);
 
     window.addEventListener(newEventName, event => console.log(event));
+
+    // A cache creating to not create few time the same wrapper.
 ```
 
 - BooleanAttribute.getBoolean (returns a boolean value for a html boolean attribute)
