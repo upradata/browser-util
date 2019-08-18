@@ -1,5 +1,8 @@
+declare var ENVIRONMENT: 'browser' | 'node';
+
 // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-const isBrowser = typeof window !== 'undefined';
+const isBrowser = typeof window !== 'undefined' || (typeof ENVIRONMENT !== 'undefined' && ENVIRONMENT === 'browser');
+
 const random = isBrowser ? crypto.getRandomValues : require('crypto').randomFillSync;
 
 export function guid() {
