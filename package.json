@@ -9,7 +9,7 @@
         "url": "https://github.com/mt-typescript/browser-util.git"
     },
     "license": "MIT",
-    "version": "1.0.12",
+    "version": "1.0.11",
     "description": "",
     "main": "dist",
     "types": "lib-esm",
@@ -23,7 +23,7 @@
         "postbuild": "yarn test && yarn e2e",
         "build:watch": "yarn tsc -w",
         "github-push": "yarn build && npm version patch && git push && git push --tags",
-        "npm-publish": "yarn build && git --access public"
+        "npm-publish": "yarn build && npm publish --access public"
     },
     "files": [
         "dist",
