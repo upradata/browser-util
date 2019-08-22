@@ -1,8 +1,8 @@
 Arguments: 
-  /home/milottit/.nvm/versions/node/v12.7.0/bin/node /home/milottit/.nvm/versions/node/v12.7.0/bin/yarn add crypto: ^1.0.1,
+  /home/milottit/.nvm/versions/node/v12.7.0/bin/node /home/milottit/.nvm/versions/node/v12.7.0/bin/yarn version
 
 PATH: 
-  /home/milottit/.nvm/versions/node/v12.7.0/bin:/home/milottit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/milottit/Libraries/NpmLocal/bin:/home/milottit/Libraries/IonicGenerate/bin:/home/milottit/Libraries/IonicRunCordova/bin:/home/milottit/bin:.:/bin:./node_modules/.bin:/usr/share/jdk-9.0.4/bin:/usr/local/android-studio/bin:/home/milottit/Android/Sdk/tools:/home/milottit/Android/Sdk/platform-tools::/home/milottit/bin/TEE-CLC-14.123.1:/usr/lib/vsts-cli/bin:/home/milottit/Documents/UpraData/Code/Accounting/bin:/home/milottit/.nvm/versions/node/v12.7.0/bin
+  /home/milottit/bin:/home/milottit/.nvm/versions/node/v12.7.0/bin:/home/milottit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/milottit/Libraries/NpmLocal/bin:/home/milottit/Libraries/IonicGenerate/bin:/home/milottit/Libraries/IonicRunCordova/bin:/home/milottit/bin:.:/bin:./node_modules/.bin:/usr/share/jdk-9.0.4/bin:/usr/local/android-studio/bin:/home/milottit/Android/Sdk/tools:/home/milottit/Android/Sdk/platform-tools::/home/milottit/bin/TEE-CLC-14.123.1:/usr/lib/vsts-cli/bin:/home/milottit/Documents/UpraData/Code/Accounting/bin:/home/milottit/.nvm/versions/node/v12.7.0/bin:/home/milottit/Libraries/NpmLocal/bin:/home/milottit/Libraries/IonicGenerate/bin:/home/milottit/Libraries/IonicRunCordova/bin:/home/milottit/bin:.:/bin:./node_modules/.bin:/usr/share/jdk-9.0.4/bin:/usr/local/android-studio/bin:/home/milottit/Android/Sdk/tools:/home/milottit/Android/Sdk/platform-tools::/home/milottit/bin/TEE-CLC-14.123.1:/usr/lib/vsts-cli/bin:/home/milottit/Documents/UpraData/Code/Accounting/bin:/home/milottit/.nvm/versions/node/v12.7.0/bin
 
 Yarn version: 
   1.13.0
@@ -14,17 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: Invalid URL
-      at module.exports.module.exports (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:71021:9)
-      at urlParts (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:31524:75)
-      at NpmRegistry.isRequestToRegistry (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:31563:19)
-      at NpmRegistry.<anonymous> (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:31595:31)
-      at Generator.next (<anonymous>)
-      at step (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:304:30)
-      at /home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:322:14
-      at new Promise (<anonymous>)
-      at new F (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:5228:28)
-      at NpmRegistry.<anonymous> (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:301:12)
+  Error: canceled
+      at Interface.<anonymous> (/home/milottit/.nvm/versions/node/v12.7.0/lib/node_modules/yarn/lib/cli.js:125657:13)
+      at Interface.emit (events.js:203:13)
+      at Interface._ttyWrite (readline.js:880:16)
+      at ReadStream.onkeypress (readline.js:191:10)
+      at ReadStream.emit (events.js:203:13)
+      at emitKeys (internal/readline/utils.js:414:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1146:36)
+      at ReadStream.emit (events.js:203:13)
+      at addChunk (_stream_readable.js:294:12)
 
 npm manifest: 
   {
@@ -34,19 +34,30 @@ npm manifest:
           "email": "thomas.milotti@gmail.com",
           "url": "https://github.com/milottit"
       },
-      "license": "MIT",
-      "version": "1.0.0",
-      "description": "",
-      "main": "dist",
-      "types": "dist-es6",
-      "module": "dist-es6",
-      "scripts": {
-          "test": "npx jest --verbose false --config ../../jest-ut.config.js",
-          "e2e": "npx jest --verbose false --config ../../jest-e2e.config.js",
-          "clean": "shx rm -rf lib lib-esm",
-          "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
-          "build:watch": "yarn tsc -w"
+      "repository": {
+          "url": "https://github.com/mt-typescript/browser-util.git"
       },
+      "license": "MIT",
+      "version": "1.0.18",
+      "description": "",
+      "main": "lib",
+      "types": "lib-esm",
+      "module": "lib-esm",
+      "scripts": {
+          "test": "npx jest --verbose false --config jest-ut.config.js",
+          "e2e": "npx jest --passWithNoTests --verbose false --config jest-e2e.config.js",
+          "clean": "shx rm -rf lib lib-esm",
+          "prebuild": "yarn clean",
+          "build": "yarn run clean && tsc && tsc -m es6 --outDir lib-esm",
+          "postbuild": "yarn test && yarn e2e",
+          "build:watch": "yarn tsc -w",
+          "github-push": "yarn build && npm version patch && git push && git push --tags",
+          "npm-publish": "yarn build && npm publish --access public"
+      },
+      "files": [
+          "lib",
+          "lib-esm"
+      ],
       "devDependencies": {
           "@types/jest": "^24.0.17",
           "@types/node": "^12.6.9",
@@ -54,6 +65,7 @@ npm manifest:
           "shx": "^0.3.2",
           "ts-jest": "^24.0.2",
           "ts-node": "^8.3.0",
+          "tsconfig-paths": "^3.8.0",
           "tslint": "^5.10.0",
           "typescript": "^3.3.3333"
       },
@@ -64,7 +76,10 @@ npm manifest:
       "keywords": [
           "typescript",
           "util"
-      ]
+      ],
+      "publishConfig": {
+          "access": "public"
+      }
   }
 
 yarn manifest: 
@@ -422,6 +437,11 @@ Lockfile:
     integrity sha512-1cy3xkOAfSYn78dsBWy4M3h/QF/HeWPchNFDjysVtp3GHeTdSmtluNnELfCmfNRRHo0OWEcpf+NsEJQvwQfdqQ==
     dependencies:
       "@types/jest-diff" "*"
+  
+  "@types/json5@^0.0.29":
+    version "0.0.29"
+    resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
+    integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
   
   "@types/node@^12.6.9":
     version "12.6.9"
@@ -901,11 +921,6 @@ Lockfile:
       shebang-command "^1.2.0"
       which "^1.2.9"
   
-  crypto@^1.0.1:
-    version "1.0.1"
-    resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
-    integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
-  
   cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
     version "0.3.8"
     resolved "https://registry.yarnpkg.com/cssom/-/cssom-0.3.8.tgz#9f1276f5b2b463f2114d3f2c75250af8c1a36f4a"
@@ -974,6 +989,11 @@ Lockfile:
     version "0.1.3"
     resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
     integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
+  
+  deepmerge@^2.0.1:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+    integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
   
   define-properties@^1.1.2:
     version "1.1.3"
@@ -2193,6 +2213,13 @@ Lockfile:
     version "2.1.0"
     resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.0.tgz#e7a0c62c48285c628d20a10b85c89bb807c32850"
     integrity sha512-8Mh9h6xViijj36g7Dxi+Y4S6hNGV96vcJZr/SrlHh1LR/pEn/8j/+qIBbs44YKl69Lrfctp4QD+AdWLTMqEZAQ==
+    dependencies:
+      minimist "^1.2.0"
+  
+  json5@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
+    integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
     dependencies:
       minimist "^1.2.0"
   
@@ -3541,6 +3568,17 @@ Lockfile:
     version "1.1.3"
     resolved "https://registry.yarnpkg.com/ts-util-is/-/ts-util-is-1.1.3.tgz#25ef1d717182dd2fd3f963ee5d513548040cbef9"
     integrity sha1-Je8dcXGC3S/T+WPuXVE1SAQMvvk=
+  
+  tsconfig-paths@^3.8.0:
+    version "3.8.0"
+    resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.8.0.tgz#4e34202d5b41958f269cf56b01ed95b853d59f72"
+    integrity sha512-zZEYFo4sjORK8W58ENkRn9s+HmQFkkwydDG7My5s/fnfr2YYCaiyXe/HBUcIgU8epEKOXwiahOO+KZYjiXlWyQ==
+    dependencies:
+      "@types/json5" "^0.0.29"
+      deepmerge "^2.0.1"
+      json5 "^1.0.1"
+      minimist "^1.2.0"
+      strip-bom "^3.0.0"
   
   tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
     version "1.10.0"
