@@ -9,7 +9,7 @@
         "url": "https://github.com/mt-typescript/browser-util.git"
     },
     "license": "MIT",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "",
     "main": "lib",
     "types": "lib-esm",
