@@ -1,5 +1,4 @@
-import { guid } from './guid';
-import { isUndefined, isDefined } from './is';
+import { guid, isUndefined, isDefined } from '@upradata/util';
 
 /* import { rafFeature } from '@features-detection/features/js/requestAnimationFrame';
 
