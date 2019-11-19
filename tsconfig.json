@@ -16,7 +16,7 @@
         // "target": "es2015",
         "target": "es5",
         "traceResolution": false,
-        "outDir": "dist"
+        "outDir": "lib"
     },
     "include": [
         "src"

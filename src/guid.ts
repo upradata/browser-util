@@ -5,7 +5,7 @@ type Random = <T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint
 let random: Random = undefined;
 
 if (typeof ENVIRONMENT !== 'undefined' && ENVIRONMENT === 'browser')
-    random = crypto.getRandomValues;
+    random = crypto.getRandomValues.bind(crypto);
 else {
     // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
     const isBrowser = typeof window !== 'undefined';
