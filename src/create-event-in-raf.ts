@@ -1,4 +1,5 @@
-import { guid, isUndefined, isDefined } from '@upradata/util';
+import { isUndefined, isDefined } from '@upradata/util';
+import { guid } from './useful';
 
 /* import { rafFeature } from '@features-detection/features/js/requestAnimationFrame';
 
@@ -13,7 +14,7 @@ export class SourceEventOption {
 
 export class DestinationEventOption {
     eventName: string;
-    getDetail?: (event: Event, ...any) => any;
+    getDetail?: (event: Event, ...any: any[]) => any;
     debug?: string = '';
 }
 
@@ -61,7 +62,7 @@ export class ElementTargetCache<T> {
     }
 
 
-    set(param: CacheParameter & { data: T }) {
+    set(param: CacheParameter & { data: T; }) {
         const { elementTarget, eventName, data } = param;
         let mapEventNameToData = this.cache.get(elementTarget);
 
