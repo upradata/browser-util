@@ -1,60 +1,61 @@
 {
-    "name": "@upradata/browser-util",
-    "author": {
-        "name": "Thomas Milotti",
-        "email": "thomas.milotti@gmail.com",
-        "url": "https://github.com/milottit"
-    },
-    "repository": {
-        "url": "https://github.com/mt-typescript/browser-util.git"
-    },
-    "license": "MIT",
-    "version": "1.0.21",
-    "description": "",
-    "main": "lib",
-    "types": "lib-esm",
-    "module": "lib-esm",
-    "files": [
-        "lib",
-        "lib-esm"
-    ],
-    "scripts": {
-        "test": "npx jest --verbose false --config jest-ut.config.js",
-        "e2e": "npx jest --passWithNoTests --verbose false --config jest-e2e.config.js",
-        "clean": "shx rm -rf lib lib-esm",
-        "watch": "concurrently 'tsc -w' 'tsc -w -m esnext --outDir lib-esm'",
-        "prebuild": "npm run clean",
-        "build": "npm run run clean && tsc && tsc -m esnext --outDir lib-esm",
-        "postbuild": "npm run test && npm run e2e",
-        "build:watch": "npm run tsc -w",
-        "github-push": "npm run build && npm version patch && git push && git push --tags",
-        "npm-publish": "npm run build && npm publish --access public"
-    },
-    "dependencies": {
-        "rxjs": "^6.5.5"
-    },
-    "devDependencies": {
-        "@types/jest": "^26.0.0",
-        "@types/node": "^14.0.13",
-        "concurrently": "^5.2.0",
-        "jest": "^26.0.1",
-        "shx": "^0.3.2",
-        "ts-jest": "^26.1.0",
-        "ts-node": "^8.10.2",
-        "tsconfig-paths": "^3.9.0",
-        "tslint": "^6.1.2",
-        "typescript": "^3.9.5"
-    },
-    "keywords": [
-        "typescript",
-        "util"
-    ],
-    "publishConfig": {
-        "access": "public"
-    },
-    "local": {
-        "dependencies": {
-            "@upradata/util": "link:/home/milottit/Libraries/Util/util@1.0.24"
-        }
-    }
+	"name": "@upradata/browser-util",
+	"author": {
+		"name": "Thomas Milotti",
+		"email": "thomas.milotti@gmail.com",
+		"url": "https://github.com/milottit"
+	},
+	"repository": {
+		"url": "https://github.com/mt-typescript/browser-util.git"
+	},
+	"license": "MIT",
+	"version": "1.0.21",
+	"description": "",
+	"main": "lib",
+	"types": "lib-esm",
+	"module": "lib-esm",
+	"files": [
+		"lib",
+		"lib-esm"
+	],
+	"scripts": {
+		"test": "npx jest --verbose false --config jest-ut.config.js",
+		"e2e": "npx jest --passWithNoTests --verbose false --config jest-e2e.config.js",
+		"clean": "shx rm -rf lib lib-esm",
+		"watch": "concurrently 'tsc -w' 'tsc -w -m esnext --outDir lib-esm'",
+		"prebuild": "npm run clean",
+		"build": "npm run run clean && tsc && tsc -m esnext --outDir lib-esm",
+		"postbuild": "npm run test && npm run e2e",
+		"build:watch": "npm run tsc -w",
+		"github-push": "npm run build && npm version patch && git push && git push --tags",
+		"npm-publish": "npm run build && npm publish --access public"
+	},
+	"dependencies": {
+		"rxjs": "^6.6.3"
+	},
+	"devDependencies": {
+		"@babel/runtime-corejs3": "^7.11.2",
+		"@types/jest": "^26.0.14",
+		"@types/node": "^14.11.1",
+		"concurrently": "^5.3.0",
+		"jest": "^26.4.2",
+		"shx": "^0.3.2",
+		"ts-jest": "^26.3.0",
+		"ts-node": "^8.10.2",
+		"tsconfig-paths": "^3.9.0",
+		"tslint": "^6.1.3",
+		"typescript": "^3.9.7"
+	},
+	"keywords": [
+		"typescript",
+		"util"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"local": {
+		"dependencies": {
+			"@upradata/util": "link:/home/milottit/Libraries/Util/util@1.0.24"
+		}
+	}
 }
