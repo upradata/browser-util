@@ -43,13 +43,13 @@ export async function loadServices<M extends ModulesServices<S>, S = any>(module
         services[ name ] = s;
 
         if (dispatchEvents)
-            dispatchCustomEvent(serviceLoadedEventName(name));
+            dispatchCustomEvent(serviceLoadedEventName(name), { detail: s });
     }
 
 
     if (windowGlobal) {
         const global = window[ windowGlobal ] = window[ windowGlobal ] || {} as any;
-        global.services = {} as any;
+        global.services = global.services || {} as any;
 
         for (const [ k, v ] of Object.entries(services))
             global.services[ k ] = v;
@@ -57,7 +57,7 @@ export async function loadServices<M extends ModulesServices<S>, S = any>(module
 
 
     if (dispatchEvents)
-        dispatchCustomEvent(servicesLoadedEventName);
+        dispatchCustomEvent(servicesLoadedEventName, { detail: services });
 
     resolve(services);
     loaded$.next(services);
