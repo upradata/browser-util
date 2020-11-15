@@ -1,17 +1,17 @@
 import { dispatchCustomEvent } from '../custom-events';
 import { LoadModuleServices, ModulesServices, ModulesServicesConfig } from './types';
-import { ReplaySubject, Observable } from 'rxjs';
+// import { ReplaySubject, Observable } from 'rxjs'; // ====> A pity to add rxjs dependency. Promise is enough
 import { entries, ObjectOf, assignRecursive, AssignOptions, Function1 } from '@upradata/util';
 
 type Services = any;
 
 let resolve: Function1<Services> = undefined;
-const loaded$ = new ReplaySubject<Services>(1);
+// const loaded$ = new ReplaySubject<Services>(1);
 
 const servicesPromise = new Promise<Services>((res, _rej) => resolve = res);
 
 export const servicesPromise$ = <Services>(): Promise<Services> => servicesPromise;
-export const servicesObs$ = <Services>(): Observable<Services> => loaded$.asObservable();
+// export const servicesObs$ = <Services>(): Observable<Services> => loaded$.asObservable();
 
 
 
@@ -60,7 +60,7 @@ export async function loadServices<M extends ModulesServices<S>, S = any>(module
         dispatchCustomEvent(servicesLoadedEventName, { detail: services });
 
     resolve(services);
-    loaded$.next(services);
+    // loaded$.next(services);
 
     return services;
 }
