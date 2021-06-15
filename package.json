@@ -9,7 +9,7 @@
         "url": "https://github.com/mt-typescript/browser-util.git"
     },
     "license": "MIT",
-    "version": "11.1.1",
+    "version": "11.1.2",
     "description": "",
     "sideEffects": false,
     "main": "lib",
@@ -21,18 +21,19 @@
     ],
     "scripts": {
         "clean": "shx rm -rf lib lib-esm",
-        "build:watch": "npm run clean && tsc -w",
         "pre:build": "npm run clean",
         "build": "concurrently 'tsc -p tsconfig.lib.json' 'tsc -p tsconfig.lib-esm.json'",
         "post:build": "npm run test && npm run e2e",
-        "watch": "concurrently 'tsc -p tsconfig.lib.json -w' 'tsc -p tsconfig.lib-esm.json -w'",
+        "watch": "pnpm run build:watch",
+        "build:watch": "concurrently 'tsc -p tsconfig.lib.json -w' 'tsc -p tsconfig.lib-esm.json -w'",
         "test": "npx jest --verbose false --config jest-ut.config.js",
         "e2e": "npx jest --passWithNoTests --verbose false --config jest-e2e.config.js",
-        "github-push": "npm run build && npm version patch && git pushall && git pushall-tags",
+        "github-push": "npm version patch && git pushall && git pushall-tags",
         "npm-publish": "npm run build && npm publish --access public"
     },
     "dependencies": {
-        "rxjs": "^7.1.0"
+        "rxjs": "^7.1.0",
+        "@upradata/util": "^11.2.3"
     },
     "devDependencies": {
         "@babel/runtime-corejs3": "^7.14.0",
@@ -55,7 +56,7 @@
     },
     "local": {
         "dependencies": {
-            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/Util/util@11.1.1"
+            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/Util/util@11.2.3"
         }
     }
 }
