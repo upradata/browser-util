@@ -9,7 +9,7 @@
         "url": "https://github.com/upradata/browser-util.git"
     },
     "license": "MIT",
-    "version": "11.2.0",
+    "version": "11.2.1",
     "description": "",
     "sideEffects": false,
     "main": "lib",
