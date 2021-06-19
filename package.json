@@ -9,7 +9,7 @@
         "url": "https://github.com/upradata/browser-util.git"
     },
     "license": "MIT",
-    "version": "11.2.8",
+    "version": "11.2.9",
     "description": "Set of utils working only in Web Runtime",
     "sideEffects": false,
     "main": "lib",
@@ -32,8 +32,7 @@
         "npm-publish": "npm run build && npm publish --access public"
     },
     "dependencies": {
-        "rxjs": "^7.1.0",
-        "@upradata/util": "^11.2.3"
+        "rxjs": "^7.1.0"
     },
     "devDependencies": {
         "@babel/runtime-corejs3": "^7.14.0",
