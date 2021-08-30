@@ -56,7 +56,7 @@
 	},
 	"local": {
 		"dependencies": {
-			"@upradata/util": "link:/home/milottit/Libraries/Upra-Data/Util/util@11.2.3"
+			"@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@11.2.9"
 		}
 	}
 }
