@@ -31,9 +31,6 @@
         "github-push": "npm version patch && git pushall && git pushall-tags",
         "npm-publish": "npm run build && npm publish --access public"
     },
-    "dependencies": {
-        "rxjs": "^7.3.0"
-    },
     "devDependencies": {
         "@babel/runtime-corejs3": "^7.15.3",
         "@types/jest": "^27.0.1",
@@ -55,7 +52,7 @@
     },
     "local": {
         "dependencies": {
-            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/Util/util@11.2.3"
+            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@13.0.1"
         }
     }
 }
