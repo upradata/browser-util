@@ -1,16 +1,16 @@
 import { dispatchCustomEvent } from '../custom-events';
-import { LoadModuleServices, ModulesServices, ModulesServicesConfig } from './types';
+import { LoadModuleServices, ModulesServices, ModulesServicesConfig, ModulesServicesOpts } from './types';
 // import { ReplaySubject, Observable } from 'rxjs'; // ====> A pity to add rxjs dependency. Promise is enough
-import { entries, ObjectOf, assignRecursive, AssignOptions, Function1, TT$, isPromise } from '@upradata/util';
+import { entries, ObjectOf, assignRecursive, AssignOptions, Function1, TT$, isPromise, delayedPromise } from '@upradata/util';
 
 type Services = any;
 
-let resolve: Function1<Services> = undefined;
 // const loaded$ = new ReplaySubject<Services>(1);
 
-const servicesPromise = new Promise<Services>((res, _rej) => resolve = res);
+const servicesPromise = delayedPromise<Services>();
+// new Promise<Services>((res, _rej) => resolve = res);
 
-export const servicesPromise$ = <Services>(): Promise<Services> => servicesPromise;
+export const servicesLoaded$ = <Services>(): Promise<Services> => servicesPromise.promise;
 // export const servicesObs$ = <Services>(): Observable<Services> => loaded$.asObservable();
 
 interface ServicesLoaded<S> {
@@ -18,26 +18,23 @@ interface ServicesLoaded<S> {
     services: ObjectOf<S>;
 }
 
-export function loadServices<M extends ModulesServices<S>, S = any>(modulesServicesConfig?: Partial<ModulesServicesConfig<M, S>>): TT$<Partial<M>> {
 
-    const { windowGlobal, variable, include, exclude, dispatchEvents, servicesLoadedEventName, serviceLoadedEventName, beforeDispatchEvents } =
-        assignRecursive(new ModulesServicesConfig(), modulesServicesConfig, new AssignOptions({ arrayMode: 'replace' }));
+export function loadServices<M extends ModulesServices<S>, S = any>(modulesServicesConfig?: ModulesServicesOpts<M, S>): TT$<Partial<M>> {
+
+    const modulesConfig: ModulesServicesConfig<M, S> = assignRecursive(new ModulesServicesConfig<M, S>(), modulesServicesConfig, new AssignOptions({ arrayMode: 'replace' }));
+
+    const {
+        windowGlobal, variable, include, exclude, dispatchEvents,
+        servicesLoadedEventName, serviceLoadedEventName, beforeDispatchEvents
+    } = modulesConfig;
 
     const services = {};
 
-    const loadedPromises: TT$<ServicesLoaded<S>>[] = [];
+    const loadedServices: TT$<ServicesLoaded<S>>[] = [];
 
-    const addService = (name: string, config: any, module: TT$<LoadModuleServices<any, ObjectOf<S>, S>>) => {
-        if (isPromise(module)) {
-            const loaded = module.then(m => m.loadServices(config)).then(services => ({ name, services }));
-            loadedPromises.push(loaded);
-        } else {
-            const loaded = module.loadServices(config);
-            if (isPromise(loaded))
-                loadedPromises.push(loaded.then(services => ({ name, services })));
-            else
-                loadedPromises.push({ name, services: loaded });
-        }
+    const addService = (name: string, config: any, module: TT$<LoadModuleServices<any, ObjectOf<S>>>) => {
+        const loaded = Promise.resolve(module).then(m => m.loadServices(config)).then(services => ({ name, services }));
+        loadedServices.push(loaded);
     };
 
     for (const [ name, serviceConfig ] of entries(modulesServicesConfig.modulesServices)) {
@@ -56,7 +53,7 @@ export function loadServices<M extends ModulesServices<S>, S = any>(modulesServi
                 dispatchCustomEvent(serviceLoadedEventName(name), { detail: s });
         }
 
-        const variables = [ variable ];
+        const variables = variable ? [ variable ] : [];
 
         if (windowGlobal) {
             const global = window[ windowGlobal ] = window[ windowGlobal ] || {} as any;
@@ -67,8 +64,7 @@ export function loadServices<M extends ModulesServices<S>, S = any>(modulesServi
 
 
         for (const variable of variables.filter(v => !!v)) {
-            for (const [ k, v ] of Object.entries(services))
-                variable[ k ] = v;
+            Object.assign(variable, services);
         }
 
         if (windowGlobal)
@@ -79,13 +75,13 @@ export function loadServices<M extends ModulesServices<S>, S = any>(modulesServi
         if (dispatchEvents)
             dispatchCustomEvent(servicesLoadedEventName, { detail: services });
 
-        resolve(services);
+        servicesPromise.resolve(services);
         // loaded$.next(services);
 
         return services;
     };
 
-    const returnPromise = loadedPromises.some(isPromise);
+    const returnPromise = loadedServices.some(isPromise);
 
-    return returnPromise ? Promise.all(loadedPromises).then(handleServicesLoaded) : handleServicesLoaded(loadedPromises as ServicesLoaded<S>[]);
+    return returnPromise ? Promise.all(loadedServices).then(handleServicesLoaded) : handleServicesLoaded(loadedServices as ServicesLoaded<S>[]);
 }
