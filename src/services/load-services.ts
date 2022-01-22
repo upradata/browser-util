@@ -1,7 +1,7 @@
 import { dispatchCustomEvent } from '../custom-events';
-import { LoadModuleServices, ModulesServices, ModulesServicesConfig, ModulesServicesOpts } from './types';
+import { LoadModuleServices, ModulesServices, ModulesServicesConfiguration, ModulesServicesConfig, DefaultModuleServices } from './types';
 // import { ReplaySubject, Observable } from 'rxjs'; // ====> A pity to add rxjs dependency. Promise is enough
-import { entries, ObjectOf, assignRecursive, AssignOptions, Function1, TT$, isPromise, delayedPromise } from '@upradata/util';
+import { entries, assignRecursive, AssignOptions, TT$, isPromise, delayedPromise } from '@upradata/util';
 
 type Services = any;
 
@@ -15,13 +15,18 @@ export const servicesLoaded$ = <Services>(): Promise<Services> => servicesPromis
 
 interface ServicesLoaded<S> {
     name: string;
-    services: ObjectOf<S>;
+    services: DefaultModuleServices<S>;
 }
 
 
-export function loadServices<M extends ModulesServices<S>, S = any>(modulesServicesConfig?: ModulesServicesOpts<M, S>): TT$<Partial<M>> {
+export function loadServices<M extends ModulesServices<S>, S = any>(modulesServicesConfig?: ModulesServicesConfig<M>): TT$<Partial<M>> {
 
-    const modulesConfig: ModulesServicesConfig<M, S> = assignRecursive(new ModulesServicesConfig<M, S>(), modulesServicesConfig, new AssignOptions({ arrayMode: 'replace' }));
+    const modulesConfig: ModulesServicesConfiguration<M> = assignRecursive(
+        new ModulesServicesConfiguration<M>(),
+        modulesServicesConfig,
+        new AssignOptions({ arrayMode: 'replace' })
+    );
+
 
     const {
         windowGlobal, variable, include, exclude, dispatchEvents,
@@ -32,12 +37,12 @@ export function loadServices<M extends ModulesServices<S>, S = any>(modulesServi
 
     const loadedServices: TT$<ServicesLoaded<S>>[] = [];
 
-    const addService = (name: string, config: any, module: TT$<LoadModuleServices<any, ObjectOf<S>>>) => {
+    const addService = (name: string, config: any, module: TT$<LoadModuleServices<any, DefaultModuleServices<any>>>) => {
         const loaded = Promise.resolve(module).then(m => m.loadServices(config)).then(services => ({ name, services }));
         loadedServices.push(loaded);
     };
 
-    for (const [ name, serviceConfig ] of entries(modulesServicesConfig.modulesServices)) {
+    for (const [ name, serviceConfig ] of entries(modulesServicesConfig.config)) {
         if (exclude && exclude[ name ])
             continue;
 
