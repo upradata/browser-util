@@ -52,7 +52,7 @@
     },
     "local": {
         "dependencies": {
-            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@14.0.0"
+            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@16.0.0"
         },
         "usedBy": {
             "@upradata/tilda-services-components": "/home/milottit/Libraries/Tilda/services-components",
@@ -62,6 +62,7 @@
         }
     },
     "dependencies": {
-        "@upradata/util": "^13.0.1"
-    }
+        "@upradata/util": "^16.0.0"
+    },
+    "peersDependencies": {}
 }
