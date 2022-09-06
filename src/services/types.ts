@@ -20,8 +20,7 @@ export type UnresolvedModuleServices<Services extends Record<PropertyKey, TT$<Se
 export type ResolvedModuleServices<Services extends Record<PropertyKey, TT$<Service>>, Service = any> = UnpromisedValues<Services>;
 
 
-export type ModulesServices<Services extends ModuleServices<any, {}>> = Services;
-
+export type ModulesServices<Modules extends Record<PropertyKey, ModuleServices<any>> = Record<string, DefaultModuleServices<any>>> = Modules;
 
 
 export type LoadServices<C, M extends ModuleServices<any>> = (configuration?: C) => TT$<UnresolvedModuleServices<M>>;
@@ -52,24 +51,24 @@ export type ModuleServicesConfig<M extends ModuleServices<any> = ModuleServices<
  */
 
 
-export type DefaultModulesOptions<Modules extends ModulesServices<{}>> = Partial<Record<keyof Modules, any>>;
+export type DefaultModulesOptions<Modules extends ModulesServices> = Partial<Record<keyof Modules, any>>;
 
-export type ModulesServicesConfOptions<Modules extends ModulesServices<{}>, ModulesOptions extends DefaultModulesOptions<Modules>> = {
-    [ moduleNames in keyof Modules & keyof ModulesOptions ]: ModuleServicesConfig<Modules[ moduleNames ], ModulesOptions[ moduleNames ]>
+export type ModulesServicesConfOptions<Modules extends ModulesServices, ModulesOptions extends DefaultModulesOptions<Modules>> = {
+    [ moduleNames in keyof Modules & keyof ModulesOptions ]: ModuleServicesConfig<Modules[ string ], ModulesOptions[ moduleNames ]>
 };
 
 
 export class ModulesServicesConfiguration<
     Modules extends ModulesServices<{}>,
     ModulesConfOptions extends ModulesServicesConfOptions<Modules, any> = ModulesServicesConfOptions<Modules, any>
-    > {
+> {
     config: Partial<ModulesConfOptions> = {};
     windowGlobal: string;
     variable: object;
     include: Partial<Record<keyof Modules, boolean>>;
     exclude: Partial<Record<keyof Modules, boolean>>;
     dispatchEvents: boolean = true;
-    beforeDispatchEvents: () => any = () => { };
+    beforeDispatchEvents: () => void = () => { };
     servicesLoadedEventName: string = '__services-loaded__';
     serviceLoadedEventName: (name: string) => string = name => `__services-loaded__/${name}`;
 }
@@ -78,4 +77,4 @@ export class ModulesServicesConfiguration<
 export type ModulesServicesConfig<
     Modules extends ModulesServices<{}>,
     ModulesOptions extends ModulesServicesConfOptions<Modules, any> = Record<keyof Modules, any>
-    > = Partial<ModulesServicesConfiguration<Modules, ModulesOptions>>;
+> = Partial<ModulesServicesConfiguration<Modules, ModulesOptions>>;
