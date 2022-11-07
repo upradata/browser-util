@@ -26,10 +26,17 @@ const servicesPromise = delayedPromise<Services>();
 export const servicesLoaded$ = <Services>(): Promise<Services> => servicesPromise.promise;
 // export const servicesObs$ = <Services>(): Observable<Services> => loaded$.asObservable();
 
-interface ServicesLoaded<S> {
+type ServicesLoadedSuccess<S> = {
     name: string;
     services: DefaultModuleServices<S>;
-}
+    type: 'success';
+};
+
+type ServicesLoadedError = {
+    name: string;
+    error: Error;
+    type: 'error';
+};
 
 
 export function loadServices<
@@ -54,7 +61,7 @@ export function loadServices<
 
     const services = {};
 
-    const loadedServices: TT$<ServicesLoaded<Service>>[] = [];
+    const loadedServices: Array<TT$<ServicesLoadedSuccess<Service> | ServicesLoadedError>> = [];
 
     const addService = (name: string, config: any, module: TT$<LoadModuleServices<any, DefaultModuleServices<TT$<Service>>>>) => {
 
@@ -63,8 +70,8 @@ export function loadServices<
                 entries(services).map(async ([ key, service ]) => [ key, await service ]))
             );
 
-            return { name, services: resolvedServices };
-        });
+            return { name, services: resolvedServices, type: 'success' as const };
+        }).catch(err => ({ name, error: err instanceof Error ? err : new Error(`Could not load services in module`), type: 'error' as const }));
 
         loadedServices.push(loaded);
     };
@@ -83,12 +90,17 @@ export function loadServices<
         }
     }
 
-    const handleServicesLoaded = (servicesLoaded: ServicesLoaded<Service>[]): Partial<ResolvedModuleServices<Modules>> => {
-        for (const { name, services: s } of servicesLoaded) {
-            services[ name ] = s;
+    const handleServicesLoaded = (servicesLoaded: Array<ServicesLoadedSuccess<Service> | ServicesLoadedError>): Partial<ResolvedModuleServices<Modules>> => {
+        for (const serviceLoaded of servicesLoaded) {
+            if (serviceLoaded.type === 'error') {
+                console.error(serviceLoaded.error);
+            } else {
+                const { name, services: s } = serviceLoaded;
+                services[ name ] = s;
 
-            if (dispatchEvents)
-                dispatchCustomEvent(serviceLoadedEventName(name), { detail: s });
+                if (dispatchEvents)
+                    dispatchCustomEvent(serviceLoadedEventName(name), { detail: s });
+            }
         }
 
         const variables = variable ? [ variable ] : [];
@@ -122,5 +134,5 @@ export function loadServices<
 
     const returnPromise = loadedServices.some(isPromise);
 
-    return returnPromise ? Promise.all(loadedServices).then(handleServicesLoaded) : handleServicesLoaded(loadedServices as ServicesLoaded<Service>[]);
+    return returnPromise ? Promise.all(loadedServices).then(handleServicesLoaded) : handleServicesLoaded(loadedServices as ServicesLoadedSuccess<Service>[]);
 }
