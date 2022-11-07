@@ -52,7 +52,7 @@
     },
     "local": {
         "dependencies": {
-            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@16.0.2"
+            "@upradata/util": "link:/home/milottit/Libraries/Upra-Data/util@16.0.3"
         },
         "usedBy": {
             "@upradata/tilda-services-components": "/home/milottit/Libraries/Tilda/services-components",
@@ -60,5 +60,9 @@
             "@upradata/tilda-stencil-components": "/home/milottit/Libraries/Tilda/stencil-components",
             "caca": "/home/milottit/CACA"
         }
-    }
+    },
+    "dependencies": {
+        "@upradata/util": "^16.0.3"
+    },
+    "peersDependencies": {}
 }
